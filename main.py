@@ -72,7 +72,6 @@ e2_1 = np.zeros(n1)
 d_iim[0] = 1
 d_iim[n1-1] = 1
 fi_iim[0] = f(0.25*h1)
-print("fi[0]=", fi_iim[0])
 fi_iim[n1-1] = f(1 - 0.25*h1)
 
 for j in range(0, n1-1):
@@ -80,17 +79,20 @@ for j in range(0, n1-1):
 for j in range(1, n1 - 1):
     d_iim[j] = 1
     fi_iim[j] = f(x_h1[j])
+print("fi_iim", fi_iim)
+print("a_iim", a_iim)
 
 b2_1[0] = h1*fi_iim[0]/2
 d2_1[0] = 1 + h1*d_iim[0]/2 + a_iim[0]/h1
 e2_1[0] = - a_iim[0]/h1
 
 b2_1[n1-1] = 1+h1*fi_iim[n1-1]/2
-c2_1[n1-1] = - a_iim[0]/h1
+c2_1[n1-1] = - a_iim[n1-2]/h1
 d2_1[n1-1] = 1 + h1*d_iim[n1-1]/2 + a_iim[n1-2]/h1
 
+
 for j in range(1, n1-1):
-    b2_1[j] = -f(x_h1[j])
+    b2_1[j] = -fi_iim[j]
     c2_1[j] = a_iim[j-1]/(h1*h1)
     d2_1[j] = -(a_iim[j]+a_iim[j-1])/(h1*h1)-d_iim[j]
     e2_1[j] = a_iim[j]/(h1*h1)
@@ -120,19 +122,22 @@ fi_vdm[n1-1] = f(1)
 for j in range(0, n1-1):
     a_vdm[j] = (k(x_h1[j])+k(x_h1[j+1]))/2
 for j in range(1, n1 - 1):
-    d_vdm[j] = (x_h1[j+1]-x_h1[j-1])/2*h1
-    fi_iim[j] = (f(x_h1[j])*(x_h1[j+1]-x_h1[j])+f(x_h1[j])*(x_h1[j]-x_h1[j-1]))/2*h1
+    d_vdm[j] = 1
+    fi_vdm[j] = (f(x_h1[j])*(x_h1[j+1]-x_h1[j])+f(x_h1[j])*(x_h1[j]-x_h1[j-1]))/(2*h1)
 
+print("a_vdm", a_vdm)
+print("d_vdm", d_vdm)
+print("fi_vdm", fi_vdm)
 b3_1[0] = h1*fi_vdm[0]/2
 d3_1[0] = 1 + h1*d_vdm[0]/2 + a_vdm[0]/h1
 e3_1[0] = - a_vdm[0]/h1
 
 b3_1[n1-1] = 1+h1*fi_vdm[n1-1]/2
-c3_1[n1-1] = - a_vdm[0]/h1
+c3_1[n1-1] = - a_vdm[n1-2]/h1
 d3_1[n1-1] = 1 + h1*d_vdm[n1-1]/2 + a_vdm[n1-2]/h1
 
 for j in range(1, n1-1):
-    b3_1[j] = -f(x_h1[j])
+    b3_1[j] = -fi_vdm[j]
     c3_1[j] = a_vdm[j-1]/(h1*h1)
     d3_1[j] = -(a_vdm[j]+a_vdm[j-1])/(h1*h1)-d_vdm[j]
     e3_1[j] = a_vdm[j]/(h1*h1)
